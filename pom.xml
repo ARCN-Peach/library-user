@@ -23,6 +23,7 @@
         <jjwt.version>0.12.6</jjwt.version>
         <testcontainers.version>1.21.1</testcontainers.version>
         <sonar.organization>arcn-peach</sonar.organization>
+        <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
     </properties>
 
     <dependencies>
