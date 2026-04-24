@@ -2,8 +2,9 @@ package com.library.user.infrastructure.messaging;
 
 import static org.mockito.Mockito.verify;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.library.user.application.usecase.HandleFineGeneratedUseCase;
-import com.library.user.application.usecase.HandleUserDebtClearedUseCase;
+import com.library.user.application.usecase.HandleFinePaidUseCase;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -13,36 +14,46 @@ class FineEventsListenerTest {
     @Test
     void onFineGeneratedUsesProvidedCorrelationId() {
         var handleFineGeneratedUseCase = Mockito.mock(HandleFineGeneratedUseCase.class);
-        var handleUserDebtClearedUseCase = Mockito.mock(HandleUserDebtClearedUseCase.class);
-        var listener = new FineEventsListener(handleFineGeneratedUseCase, handleUserDebtClearedUseCase);
+        var handleFinePaidUseCase = Mockito.mock(HandleFinePaidUseCase.class);
+        var listener = new FineEventsListener(new ObjectMapper(), handleFineGeneratedUseCase, handleFinePaidUseCase);
         var userId = UUID.randomUUID();
+        var correlationId = UUID.randomUUID();
 
-        listener.onFineGenerated(new FineEventsListener.FineGeneratedMessage(UUID.randomUUID(), userId, "12.00"), "corr-1");
+        org.assertj.core.api.Assertions.assertThatCode(() -> listener.onFineGenerated("""
+                {"correlationId":"%s","fineId":"%s","userId":"%s","amount":"12.00"}
+                """.formatted(correlationId, UUID.randomUUID(), userId)))
+                .doesNotThrowAnyException();
 
-        verify(handleFineGeneratedUseCase).execute(userId, "fine generated", "corr-1");
+        verify(handleFineGeneratedUseCase).execute(userId, "fine generated", correlationId.toString());
     }
 
     @Test
     void onFineGeneratedFallsBackToSystemCorrelationId() {
         var handleFineGeneratedUseCase = Mockito.mock(HandleFineGeneratedUseCase.class);
-        var handleUserDebtClearedUseCase = Mockito.mock(HandleUserDebtClearedUseCase.class);
-        var listener = new FineEventsListener(handleFineGeneratedUseCase, handleUserDebtClearedUseCase);
+        var handleFinePaidUseCase = Mockito.mock(HandleFinePaidUseCase.class);
+        var listener = new FineEventsListener(new ObjectMapper(), handleFineGeneratedUseCase, handleFinePaidUseCase);
         var userId = UUID.randomUUID();
 
-        listener.onFineGenerated(new FineEventsListener.FineGeneratedMessage(UUID.randomUUID(), userId, "12.00"), null);
+        org.assertj.core.api.Assertions.assertThatCode(() -> listener.onFineGenerated("""
+                {"fineId":"%s","userId":"%s","amount":"12.00"}
+                """.formatted(UUID.randomUUID(), userId)))
+                .doesNotThrowAnyException();
 
         verify(handleFineGeneratedUseCase).execute(userId, "fine generated", "system");
     }
 
     @Test
-    void onUserDebtClearedDelegatesToUseCase() {
+    void onFinePaidDelegatesToUseCase() {
         var handleFineGeneratedUseCase = Mockito.mock(HandleFineGeneratedUseCase.class);
-        var handleUserDebtClearedUseCase = Mockito.mock(HandleUserDebtClearedUseCase.class);
-        var listener = new FineEventsListener(handleFineGeneratedUseCase, handleUserDebtClearedUseCase);
+        var handleFinePaidUseCase = Mockito.mock(HandleFinePaidUseCase.class);
+        var listener = new FineEventsListener(new ObjectMapper(), handleFineGeneratedUseCase, handleFinePaidUseCase);
         var userId = UUID.randomUUID();
 
-        listener.onUserDebtCleared(new FineEventsListener.UserDebtClearedMessage(userId));
+        org.assertj.core.api.Assertions.assertThatCode(() -> listener.onFinePaid("""
+                {"fineId":"%s","userId":"%s"}
+                """.formatted(UUID.randomUUID(), userId)))
+                .doesNotThrowAnyException();
 
-        verify(handleUserDebtClearedUseCase).execute(userId);
+        verify(handleFinePaidUseCase).execute(userId);
     }
 }

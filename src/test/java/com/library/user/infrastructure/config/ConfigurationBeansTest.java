@@ -27,16 +27,16 @@ class ConfigurationBeansTest {
         DirectExchange userExchange = configuration.userExchange();
         DirectExchange fineExchange = configuration.fineExchange();
         Queue fineGeneratedQueue = configuration.fineGeneratedQueue();
-        Queue debtClearedQueue = configuration.userDebtClearedQueue();
+        Queue finePaidQueue = configuration.finePaidQueue();
 
         assertThat(userExchange.getName()).isEqualTo(RabbitMqConfiguration.USER_EXCHANGE);
         assertThat(fineExchange.getName()).isEqualTo(RabbitMqConfiguration.FINE_EXCHANGE);
-        assertThat(fineGeneratedQueue.getName()).isEqualTo("library-user.fine-generated.v1");
-        assertThat(debtClearedQueue.getName()).isEqualTo("library-user.user-debt-cleared.v1");
+        assertThat(fineGeneratedQueue.getName()).isEqualTo("user.fine-generated");
+        assertThat(finePaidQueue.getName()).isEqualTo("user.fine-paid");
         assertThat(configuration.fineGeneratedBinding(fineGeneratedQueue, fineExchange).getRoutingKey())
                 .isEqualTo(RabbitMqConfiguration.FINE_GENERATED_ROUTING_KEY);
-        assertThat(configuration.userDebtClearedBinding(debtClearedQueue, fineExchange).getRoutingKey())
-                .isEqualTo(RabbitMqConfiguration.USER_DEBT_CLEARED_ROUTING_KEY);
+        assertThat(configuration.finePaidBinding(finePaidQueue, fineExchange).getRoutingKey())
+                .isEqualTo(RabbitMqConfiguration.FINE_PAID_ROUTING_KEY);
     }
 
     @Test

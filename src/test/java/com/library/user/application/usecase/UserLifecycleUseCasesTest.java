@@ -70,7 +70,7 @@ class UserLifecycleUseCasesTest {
         var user = User.registerReader(new Name("Reader"), new Email("reader@test.com"), "hash", Instant.now());
         user.block(Instant.parse("2026-04-22T00:00:00Z"));
         userRepository.save(user);
-        var useCase = new HandleUserDebtClearedUseCase(changeUserStatusUseCase);
+        var useCase = new HandleFinePaidUseCase(changeUserStatusUseCase);
 
         useCase.execute(user.id().value());
 

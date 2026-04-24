@@ -11,11 +11,11 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMqConfiguration {
 
     public static final String USER_EXCHANGE = "library.user.exchange";
-    public static final String FINE_EXCHANGE = "library.fine.exchange";
+    public static final String FINE_EXCHANGE = "fine";
     public static final String USER_BLOCKED_ROUTING_KEY = "user.blocked.v1";
     public static final String USER_REGISTERED_ROUTING_KEY = "user.registered.v1";
-    public static final String FINE_GENERATED_ROUTING_KEY = "fine.generated.v1";
-    public static final String USER_DEBT_CLEARED_ROUTING_KEY = "user.debt-cleared.v1";
+    public static final String FINE_GENERATED_ROUTING_KEY = "fine.fine.fine_generated.v1";
+    public static final String FINE_PAID_ROUTING_KEY = "fine.fine.fine_paid.v1";
 
     @Bean
     DirectExchange userExchange() {
@@ -29,12 +29,12 @@ public class RabbitMqConfiguration {
 
     @Bean
     Queue fineGeneratedQueue() {
-        return new Queue("library-user.fine-generated.v1", true);
+        return new Queue("user.fine-generated", true);
     }
 
     @Bean
-    Queue userDebtClearedQueue() {
-        return new Queue("library-user.user-debt-cleared.v1", true);
+    Queue finePaidQueue() {
+        return new Queue("user.fine-paid", true);
     }
 
     @Bean
@@ -43,7 +43,7 @@ public class RabbitMqConfiguration {
     }
 
     @Bean
-    Binding userDebtClearedBinding(Queue userDebtClearedQueue, DirectExchange fineExchange) {
-        return BindingBuilder.bind(userDebtClearedQueue).to(fineExchange).with(USER_DEBT_CLEARED_ROUTING_KEY);
+    Binding finePaidBinding(Queue finePaidQueue, DirectExchange fineExchange) {
+        return BindingBuilder.bind(finePaidQueue).to(fineExchange).with(FINE_PAID_ROUTING_KEY);
     }
 }

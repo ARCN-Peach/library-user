@@ -30,14 +30,20 @@
 
 ## Consumidos
 
-### `fine.generated.v1`
+### `fine.fine.fine_generated.v1`
 
-- exchange: `library.fine.exchange`
-- routing key: `fine.generated.v1`
+- exchange: `fine`
+- routing key: `fine.fine.fine_generated.v1`
 - efecto: bloquea usuario
 
-### `user.debt-cleared.v1`
+### `fine.fine.fine_paid.v1`
 
-- exchange: `library.fine.exchange`
-- routing key: `user.debt-cleared.v1`
+- exchange: `fine`
+- routing key: `fine.fine.fine_paid.v1`
 - efecto: desbloquea usuario
+
+Nota de alineación con `library-fine`:
+
+- `library-fine` hoy publica `FinePaidEvent`, no un evento explícito de "usuario sin deuda pendiente".
+- `library-user` consume ese evento para desbloqueo y queda alineado técnicamente con `library-fine`.
+- Si en el futuro `library-fine` soporta múltiples multas abiertas por usuario, conviene reemplazar este contrato por un evento de deuda liquidada o agregar una política adicional aguas arriba.
