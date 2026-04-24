@@ -45,4 +45,9 @@ jobs:
       - name: Sonar analyze
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B -X org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=ARCN-Peach_library-user -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
+        run: |
+          mvn -B -X org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+            -Dsonar.projectKey=ARCN-Peach_library-user \
+            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
+            2>&1 | tee sonar.log
+          grep -iE "jacoco|coverage|xmlreportpaths|report" sonar.log || true
