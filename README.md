@@ -1,5 +1,7 @@
 # library-user
 
+[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=ARCN-Peach_library-user&token=2fe2b7e5af4cd0f3728ffb39388a9f3374bdd360)](https://sonarcloud.io/summary/new_code?id=ARCN-Peach_library-user)
+
 Microservicio responsable del bounded context **Gestión de Usuarios** dentro del sistema de biblioteca digital.
 
 Gestiona el ciclo de vida del lector y del bibliotecario: registro, autenticación, perfil básico, estado del usuario y reacción a eventos de multas para bloquear o desbloquear acceso.
