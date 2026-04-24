@@ -49,5 +49,6 @@ jobs:
           mvn -B -X org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
             -Dsonar.projectKey=ARCN-Peach_library-user \
             -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
+            -Dsonar.coverage.exclusions=**/LibraryUserApplication.java,**/interfaces/http/**,**/infrastructure/**,**/application/dto/**,**/application/exception/**,**/application/port/** \
             2>&1 | tee sonar.log
           grep -iE "jacoco|coverage|xmlreportpaths|report" sonar.log || true

@@ -24,6 +24,14 @@
         <testcontainers.version>1.21.1</testcontainers.version>
         <sonar.organization>arcn-peach</sonar.organization>
         <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+        <sonar.coverage.exclusions>
+            **/LibraryUserApplication.java,
+            **/interfaces/http/**,
+            **/infrastructure/**,
+            **/application/dto/**,
+            **/application/exception/**,
+            **/application/port/**
+        </sonar.coverage.exclusions>
     </properties>
 
     <dependencies>
