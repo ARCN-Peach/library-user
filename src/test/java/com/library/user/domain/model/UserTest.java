@@ -29,4 +29,36 @@ class UserTest {
         assertThat(user.email().value()).isEqualTo("reader2@test.com");
         assertThat(user.updatedAt()).isEqualTo(now);
     }
+
+    @Test
+    void librarianCannotChangeEmail() {
+        var user = User.bootstrapLibrarian(new Name("Librarian"), new Email("lib@test.com"), "hash", Instant.now());
+
+        assertThatThrownBy(() -> user.updateProfile(new Name("Admin"), new Email("other@test.com"), Instant.now()))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("librarian email cannot be changed");
+    }
+
+    @Test
+    void blockReturnsFalseWhenAlreadyBlocked() {
+        var user = User.registerReader(new Name("Reader"), new Email("reader@test.com"), "hash", Instant.now());
+        user.block(Instant.now());
+
+        assertThat(user.block(Instant.now())).isFalse();
+    }
+
+    @Test
+    void unblockReturnsFalseWhenAlreadyActive() {
+        var user = User.registerReader(new Name("Reader"), new Email("reader@test.com"), "hash", Instant.now());
+
+        assertThat(user.unblock(Instant.now())).isFalse();
+    }
+
+    @Test
+    void bootstrapLibrarianCreatesLibrarianUser() {
+        var user = User.bootstrapLibrarian(new Name("Librarian"), new Email("lib@test.com"), "hash", Instant.now());
+
+        assertThat(user.role()).isEqualTo(UserRole.LIBRARIAN);
+        assertThat(user.status()).isEqualTo(UserStatus.ACTIVE);
+    }
 }

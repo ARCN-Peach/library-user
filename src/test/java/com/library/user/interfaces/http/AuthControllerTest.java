@@ -70,4 +70,20 @@ class AuthControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.accessToken").value("access"));
     }
+
+    @Test
+    void refreshReturnsTokens() throws Exception {
+        when(refreshTokenUseCase.execute("refresh-token"))
+                .thenReturn(new AuthTokens("access-2", "refresh-2"));
+
+        mockMvc.perform(post("/api/v1/auth/refresh")
+                        .header("X-Correlation-Id", "corr-1")
+                        .contentType("application/json")
+                        .content("""
+                                {"refreshToken":"refresh-token"}
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.accessToken").value("access-2"))
+                .andExpect(jsonPath("$.refreshToken").value("refresh-2"));
+    }
 }
