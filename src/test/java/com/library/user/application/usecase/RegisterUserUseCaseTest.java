@@ -57,7 +57,7 @@ class RegisterUserUseCaseTest {
         assertThat(result.email()).isEqualTo("reader@test.com");
         assertThat(userRepository.findByEmail(new Email("reader@test.com"))).isPresent();
         assertThat(outboxRepository.events).hasSize(1);
-        assertThat(outboxRepository.events.getFirst()).isInstanceOf(UserRegisteredEvent.class);
+        assertThat(outboxRepository.events.get(0)).isInstanceOf(UserRegisteredEvent.class);
     }
 
     @Test
