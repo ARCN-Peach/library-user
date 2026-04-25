@@ -9,16 +9,18 @@
     "restartPolicyMaxRetries": 3,
     "restartPolicyWindowSeconds": 60,
     "numReplicas": 1,
-    "healthcheckPath": "/actuator/health",
+    "healthcheckPath": "/actuator/health/liveness",
     "healthcheckTimeout": 30,
     "sleepApplication": false
   },
   "variables": {
-    "DATABASE_URL": "jdbc:postgresql://${{Postgres.PGHOST}}:${{Postgres.PGPORT}}/railway",
-    "DATABASE_USER": "${{Postgres.PGUSER}}",
-    "DATABASE_PASSWORD": "${{Postgres.PGPASSWORD}}",
+    "DB_URL": "jdbc:postgresql://${{Postgres.PGHOST}}:${{Postgres.PGPORT}}/railway",
+    "DB_USER": "${{Postgres.PGUSER}}",
+    "DB_PASSWORD": "${{Postgres.PGPASSWORD}}",
     "RABBITMQ_HOST": "${{RabbitMQ.RABBITMQ_HOST}}",
     "RABBITMQ_PORT": "${{RabbitMQ.RABBITMQ_PORT}}",
+    "RABBITMQ_USER": "${{RabbitMQ.RABBITMQ_DEFAULT_USER}}",
+    "RABBITMQ_PASSWORD": "${{RabbitMQ.RABBITMQ_DEFAULT_PASS}}",
     "JWT_SECRET": "change-me-change-me-change-me-change-me-1234567890"
   }
 }
