@@ -1,12 +1,13 @@
 package com.library.user.interfaces.http;
 
+import org.springdoc.core.customizers.OperationCustomizer;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.parameters.Parameter;
-import org.springdoc.core.customizers.OperationCustomizer;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class OpenApiConfiguration {
@@ -24,10 +25,17 @@ public class OpenApiConfiguration {
     @Bean
     OperationCustomizer correlationIdHeaderCustomizer() {
         return (operation, handlerMethod) -> {
-            operation.addParametersItem(new Parameter()
-                    .in("header")
-                    .required(true)
-                    .name("X-Correlation-Id"));
+            var alreadyDefined = operation.getParameters() != null
+                    && operation.getParameters().stream()
+                    .anyMatch(parameter -> "X-Correlation-Id".equalsIgnoreCase(parameter.getName()));
+
+            if (!alreadyDefined) {
+                operation.addParametersItem(new Parameter()
+                        .in("header")
+                        .required(false)
+                        .name("X-Correlation-Id")
+                        .description("Optional correlation id; generated automatically if omitted."));
+            }
             return operation;
         };
     }
