@@ -1,8 +1,6 @@
 package com.library.user.interfaces.http;
 
 import java.io.IOException;
-import java.util.UUID;
-
 import org.slf4j.MDC;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
@@ -33,7 +31,8 @@ public class CorrelationIdFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         var correlationId = request.getHeader(HEADER_NAME);
         if (correlationId == null || correlationId.isBlank()) {
-            correlationId = UUID.randomUUID().toString();
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "X-Correlation-Id header is required");
+            return;
         }
         MDC.put("correlationId", correlationId);
         response.setHeader(HEADER_NAME, correlationId);

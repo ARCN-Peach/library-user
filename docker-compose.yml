@@ -53,9 +53,9 @@ services:
       RABBITMQ_PASSWORD: guest
       JWT_SECRET: change-me-change-me-change-me-change-me-1234567890
       BOOTSTRAP_LIBRARIAN_ENABLED: "true"
-      BOOTSTRAP_LIBRARIAN_NAME: Librarian Admin
-      BOOTSTRAP_LIBRARIAN_EMAIL: librarian@library.local
-      BOOTSTRAP_LIBRARIAN_PASSWORD: Password123!
+      BOOTSTRAP_LIBRARIAN_NAME: Admin Librarian
+      BOOTSTRAP_LIBRARIAN_EMAIL: admin@library.local
+      BOOTSTRAP_LIBRARIAN_PASSWORD: 123456a.
     depends_on:
       postgres:
         condition: service_healthy

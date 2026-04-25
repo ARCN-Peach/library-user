@@ -32,9 +32,9 @@ public class OpenApiConfiguration {
             if (!alreadyDefined) {
                 operation.addParametersItem(new Parameter()
                         .in("header")
-                        .required(false)
+                        .required(true)
                         .name("X-Correlation-Id")
-                        .description("Optional correlation id; generated automatically if omitted."));
+                        .description("Required correlation id for request tracing."));
             }
             return operation;
         };

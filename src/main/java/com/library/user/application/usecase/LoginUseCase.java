@@ -30,7 +30,7 @@ public class LoginUseCase {
         this.clock = clock;
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public AuthTokens execute(String email, String rawPassword) {
         var user = userRepository.findByEmail(new Email(email))
                 .orElseThrow(() -> new UnauthorizedException("invalid credentials"));
